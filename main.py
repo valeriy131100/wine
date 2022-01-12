@@ -1,4 +1,5 @@
 from jinja2 import Environment, FileSystemLoader, select_autoescape
+from pandas import read_excel
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from datetime import datetime
 
@@ -25,6 +26,17 @@ def format_winery_age(age):
 
 
 if __name__ == '__main__':
+    wines = read_excel('wine.xlsx').rename(
+        columns={
+            'Название': 'name',
+            'Сорт': 'sort',
+            'Цена': 'price',
+            'Картинка': 'image'
+        }
+    )
+
+    print(wines)
+
     env = Environment(
         loader=FileSystemLoader('.'),
         autoescape=select_autoescape(['html'])
@@ -36,7 +48,8 @@ if __name__ == '__main__':
     winery_age = now_year - foundation_year
 
     rendered_page = template.render(
-        formatted_age=format_winery_age(winery_age)
+        formatted_age=format_winery_age(winery_age),
+        wines=wines.to_dict('records')
     )
 
     with open('index.html', 'w', encoding="utf8") as file:
