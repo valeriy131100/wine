@@ -35,8 +35,6 @@ if __name__ == '__main__':
         }
     )
 
-    print(wines)
-
     env = Environment(
         loader=FileSystemLoader('.'),
         autoescape=select_autoescape(['html'])
