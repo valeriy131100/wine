@@ -18,7 +18,7 @@ $ python3 -m venv venv
 
 Активируйте виртуальное окружение и установите зависимости:
 ```bash
-$ cd vk_comic_poster
+$ cd wine
 $ source venv/bin/activate
 $ pip install -r requirements.txt
 ```
