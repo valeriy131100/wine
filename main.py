@@ -4,6 +4,8 @@ from pandas import read_excel
 from dotenv import load_dotenv
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from datetime import datetime
+from itertools import groupby
+from operator import itemgetter
 
 
 def format_winery_age(age):
@@ -31,8 +33,15 @@ if __name__ == '__main__':
     load_dotenv()
     wines_excel = os.getenv('WINES_PATH')
 
-    wines = read_excel(wines_excel).rename(
+    env = Environment(
+        loader=FileSystemLoader('.'),
+        autoescape=select_autoescape(['html'])
+    )
+    template = env.get_template('template.html')
+
+    df_wines = read_excel(wines_excel).fillna(value='').rename(
         columns={
+            'Категория': 'category',
             'Название': 'name',
             'Сорт': 'sort',
             'Цена': 'price',
@@ -40,11 +49,14 @@ if __name__ == '__main__':
         }
     )
 
-    env = Environment(
-        loader=FileSystemLoader('.'),
-        autoescape=select_autoescape(['html'])
+    sorted_wines = sorted(
+        df_wines.to_dict('records'),
+        key=itemgetter('category')
     )
-    template = env.get_template('template.html')
+    grouped_wines = groupby(
+        sorted_wines,
+        key=itemgetter('category')
+    )
 
     now_year = datetime.now().year
     foundation_year = 1920
@@ -52,7 +64,7 @@ if __name__ == '__main__':
 
     rendered_page = template.render(
         formatted_age=format_winery_age(winery_age),
-        wines=wines.to_dict('records')
+        grouped_wines=grouped_wines
     )
 
     with open('index.html', 'w', encoding="utf8") as file:
