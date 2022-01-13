@@ -67,7 +67,7 @@ if __name__ == '__main__':
         grouped_wines=grouped_wines
     )
 
-    with open('index.html', 'w', encoding="utf8") as file:
+    with open('index.html', 'w', encoding='utf8') as file:
         file.write(rendered_page)
 
     server = HTTPServer(('0.0.0.0', 8000), SimpleHTTPRequestHandler)
