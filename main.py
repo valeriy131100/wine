@@ -10,17 +10,15 @@ from pandas import read_excel
 
 
 def format_winery_age(age):
-    str_age = str(age)
-
-    if len(str_age) > 1:
-        penultimate_number = int(str_age[-2])
+    if len(str(age)) > 1:
+        penultimate_number = int(str(age)[-2])
     else:
         penultimate_number = 0
 
     if penultimate_number == 1:
         return f'{age} лет'
 
-    last_number = int(str_age[-1])
+    last_number = int(str(age)[-1])
 
     if last_number == 1:
         return f'{age} год'
