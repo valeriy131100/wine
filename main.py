@@ -30,7 +30,7 @@ def format_winery_age(age):
 
 if __name__ == '__main__':
     load_dotenv()
-    wines_excel = os.getenv('WINES_PATH')
+    wines_filepath = os.getenv('WINES_PATH')
 
     env = Environment(
         loader=FileSystemLoader('.'),
@@ -38,7 +38,7 @@ if __name__ == '__main__':
     )
     template = env.get_template('template.html')
 
-    df_wines = read_excel(wines_excel).fillna(value='').rename(
+    wines_df = read_excel(wines_filepath).fillna(value='').rename(
         columns={
             'Категория': 'category',
             'Название': 'name',
@@ -50,7 +50,7 @@ if __name__ == '__main__':
     )
 
     sorted_wines = sorted(
-        df_wines.to_dict('records'),
+        wines_df.to_dict('records'),
         key=itemgetter('category')
     )
     grouped_wines = groupby(
