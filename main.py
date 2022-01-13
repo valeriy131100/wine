@@ -1,5 +1,7 @@
+import os
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from pandas import read_excel
+from dotenv import load_dotenv
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from datetime import datetime
 
@@ -26,7 +28,10 @@ def format_winery_age(age):
 
 
 if __name__ == '__main__':
-    wines = read_excel('wine.xlsx').rename(
+    load_dotenv()
+    wines_excel = os.getenv('WINES_PATH')
+
+    wines = read_excel(wines_excel).rename(
         columns={
             'Название': 'name',
             'Сорт': 'sort',
